@@ -452,8 +452,8 @@ def validate_code(code):
 
 1. **Clone Repository**:
 ```bash
-git clone https://github.com/Kishorelin03/linux-ai-benchmark.git
-cd linux-ai-benchmark
+git clone https://github.com/dhruvilad34/linux-ai-benchmark-main-2
+cd linux-ai-benchmark-main-2
 ```
 
 2. **Create Virtual Environment**:
