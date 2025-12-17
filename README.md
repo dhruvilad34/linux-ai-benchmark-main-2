@@ -753,14 +753,6 @@ Contributions are welcome! Please:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
----
-
-## 15. License
-
-This project is open source. Please check the repository for license information.
-
----
-
 ## 16. Acknowledgments
 
 - [OpenAI HumanEval](https://github.com/openai/human-eval) for the evaluation framework
@@ -770,18 +762,4 @@ This project is open source. Please check the repository for license information
 
 ---
 
-## 17. Contact
 
-- **GitHub**: [@Kishorelin03](https://github.com/Kishorelin03)
-- **Repository**: [https://github.com/Kishorelin03/linux-ai-benchmark](https://github.com/Kishorelin03/linux-ai-benchmark)
-- **Issues**: [Report an issue](https://github.com/Kishorelin03/linux-ai-benchmark/issues)
-
----
-
-**⭐ If you find this project useful, please star it on GitHub!**
-
-[![GitHub stars](https://img.shields.io/github/stars/Kishorelin03/linux-ai-benchmark?style=social)](https://github.com/Kishorelin03/linux-ai-benchmark/stargazers)
-
----
-
-*Last Updated: November 2025*
