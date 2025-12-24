@@ -1,4 +1,4 @@
-torch==2.4.0
+torch==2.5.1
 transformers>=4.43.0
 accelerate>=0.33.0
 bitsandbytes>=0.43.1
@@ -8,4 +8,4 @@ pyyaml>=6.0.1
 weave>=0.0.0
 wandb>=0.16.0
 gputil>=1.4.0
-git+https://github.com/openai/human-eval.git
+# git+https://github.com/openai/human-eval.git

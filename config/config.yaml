@@ -2,14 +2,14 @@ model_id: meta-llama/Meta-Llama-3.1-8B-Instruct
 load_in_4bit: true
 device: cuda
 use_data_parallelism: true  # If true, load model on each GPU separately (faster). If false, use model sharding.
-num_agents: 150          # Start with 1 agent for testing cross-evaluation
-max_new_tokens: 512       # Increased from 64 for complete solutions (HumanEval needs 200-500 tokens)
+num_agents: 150         # 16 agents per GPU (optimal load)
+max_new_tokens: 256       # Increased from 64 for complete solutions (HumanEval needs 200-500 tokens)
 batch_size: 8             # GPU batching: process this many tasks together (default: 8, set to 1 to disable)
-temperature: 0.25         # Lower temperature for more focused, accurate generations
-top_p: 0.9                # Standard nucleus sampling
+temperature: 0.2         # Lower temperature for more focused, accurate generations
+top_p: 0.95               # Standard nucleus sampling
 top_k: 40                 # Enable top_k filtering for better quality
 repetition_penalty: 1.1   # Slight penalty to reduce repetition
-do_sample: true           # Enable sampling
+do_sample: true           # Enable sampling (required when temperature < 1.0)
 num_beams: 1              # Greedy decoding (no beam search)
 early_stopping: true      # Stop early when EOS token is found
 max_retries: 2            # Retry failed generations
@@ -17,8 +17,7 @@ num_samples: 1            # Generate single sample per task (like baseline)
 enable_reflection: false  # Enable reflection/retry with corrective prompt (set to true for improved accuracy)
 gpu_monitor_interval: 1
 benchmark: humaneval
-humaneval_limit: 1
-      # use 20 for a quick smoke test
+humaneval_limit: 10       # Number of tasks
 output_dir: logs
 enable_tracing: true
 eval_workers: 4              # Number of parallel workers for test execution
@@ -26,6 +25,6 @@ eval_timeout: 10.0           # Timeout per test in seconds
 use_black_formatting: false  # Format code with black before evaluation (requires: pip install black)
 verbose: false               # Set to true for detailed logging (default: false for cleaner output)
 enable_react_pipeline: false # When true (and react_full_evaluation is false), run a small ReAct smoke test before main evaluation
-react_full_evaluation: true  # When true, route all agents/tasks through the ReAct framework instead of baseline batching
+react_full_evaluation: false  # Disabled - use direct code generation instead of ReAct framework
 react_task_limit: 0          # Number of tasks to route through ReAct (0 uses humaneval_limit or all available)
 react_log_path: logs/react_log.jsonl

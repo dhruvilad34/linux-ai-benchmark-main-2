@@ -249,6 +249,7 @@ class ResourceMonitor:
     def _monitor_loop(self):
         """Main monitoring loop that runs in background thread."""
         step = 0
+        start_time = time.time()
         while self.running:
             try:
                 metrics = log_resources()
@@ -258,9 +259,33 @@ class ResourceMonitor:
                 if WANDB_AVAILABLE and wandb and hasattr(wandb, 'log'):
                     try:
                         if hasattr(wandb, 'run') and wandb.run is not None:
-                            # Log with step for time-series graphs
-                            # Don't include '_step' in the metrics dict, just pass step= parameter
-                            wandb.log(metrics, step=step)
+                            elapsed_sec = round(time.time() - start_time, 1)
+                            
+                            # Clear metric names for W&B charts
+                            # Format: "Category/Metric_Name" 
+                            # X-axis: Time in seconds, Y-axis: % or GB
+                            wandb_metrics = {
+                                # Time (X-axis for all Resource charts)
+                                "Resource/Elapsed_Seconds": elapsed_sec,
+                                
+                                # CPU Utilization (Y-axis: 0-100%)
+                                "Resource/CPU_Utilization_%": metrics.get("cpu_percent", 0),
+                                
+                                # RAM Usage (Y-axis: 0-100% or GB)
+                                "Resource/RAM_Usage_%": metrics.get("ram_percent", 0),
+                                "Resource/RAM_Used_GB": round(metrics.get("ram_used_mb", 0) / 1024, 2),
+                            }
+                            
+                            # Add metrics for all GPUs
+                            gpu_count = metrics.get("gpu_count", 0)
+                            for i in range(gpu_count):
+                                # GPU Utilization (Y-axis: 0-100%)
+                                wandb_metrics[f"Resource/GPU{i}_Utilization_%"] = metrics.get(f"gpu_{i}_load_percent", 0) or 0
+                                # GPU Memory (Y-axis: 0-100% or GB)
+                                wandb_metrics[f"Resource/GPU{i}_Memory_%"] = metrics.get(f"gpu_{i}_memory_percent", 0) or 0
+                                wandb_metrics[f"Resource/GPU{i}_Memory_GB"] = round(metrics.get(f"gpu_{i}_memory_used_mb", 0) / 1024, 2)
+                            
+                            wandb.log(wandb_metrics)
                             step += 1
                         else:
                             # W&B not initialized yet, skip logging
